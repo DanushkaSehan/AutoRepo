@@ -1,0 +1,26 @@
+name: Auto Commit to README
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # This will run the workflow every hour
+
+jobs:
+  auto-commit-job:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # This grants the workflow permission to write to the repository
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create or update README file
+        run: |
+          echo "# My Awesome Repository" > README.md
+          echo "" >> README.md
+          echo "This file was automatically updated by a GitHub Action at $(date)." >> README.md
+
+      - name: Auto commit any changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated commit: Update README with latest timestamp"
